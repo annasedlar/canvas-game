@@ -5,7 +5,9 @@
 </head>
 <body>
 
+<script type="text/javascript">
 
+</script>
 <script type="text/javascript">
 var canvas = document.createElement("canvas") //tells browser to create a new thing - a new canvas tag
 //method attached to document object. just a tag currently, to hold stuff
@@ -33,11 +35,11 @@ var monster = new Image();
 monster.src ="monster.png";
 var monsterLocation = {
 	x: 200,
-	y: 100
+	y: 100,
+	newX: 200,
+	newY: 100,
 };
-var monsterSpeed =1;
-var monsterVectorX = 0;
-var monsterVectorY = 0;
+
 
 //An array to hold ALL keys currently pressed down (to allow diagonal movement)
 var keysDown=[];
@@ -53,23 +55,26 @@ addEventListener('keydown', function(event){
 	keysDown[event.keyCode] = true;
 });
 
-// function updateMonster(){
-// 	monsterLocation.x += monsterVectorX;
-// 	monsterLocation.y += monsterVectorY;
-// 	if(monsterLocation.x < 40){
-// 			goblinLocation.x 
-// 	}
-
-// };
-
-
-
-
-// setInterval(function(){
-// 	goblinVectorX =	((Math.ceil(Math.random()*3))-2)*gobSpeed;
-// 	goblinVectorY = ((Math.ceil(Math.random()*3))-2)*gobSpeed;
-// }, 700);
-
+function updateMonster(){   //JT's
+			if((monsterLocation.x == monsterLocation.newX)&&
+				(monsterLocation.y == monsterLocation.newY)){
+					monsternLocation.newX = Math.rand() * 400;
+					monsterLocation.newY = Math.rand()*400;
+				}else{
+					if(monsterLocation.newX > monsterLocation.x){
+						monsterLocation.x += 1;
+					}
+				if(monsterLocation.newX < monsterLocation.x){
+					monsterLocation.x -=1;
+				}
+				if(monsterLocationn.newY > monsterLocation.y){
+					monsterLocation.y +=1;
+				}
+				if(monsterLocation.y < monsterLocation.y){
+					monsterLocation.y -+1;
+				}
+			}
+		};
 // function updateGoblin(){
 // 	goblinLoc.x += goblinVectorX;
 // 	goblinLoc.y += goblinVectorY;
@@ -86,8 +91,6 @@ addEventListener('keydown', function(event){
 // 		goblinLoc.y = 16;
 // 	}
 // }
-
-
 
 
 //this is where we'll update the hero based on what's inside keysDown
