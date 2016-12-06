@@ -49,52 +49,50 @@ addEventListener('keyup', function(event){
 
 addEventListener('keydown', function(event){ 
 	keysDown[event.keyCode] = true;
-// addEventListener('keydown', function(event){
-// 	// keysDown[event.keyCode] = true;
-// 	console.log(keysDown);
-	//if keyPressed[39] is true, then the user pushed the right arrow
-	//keydown[39] === true)
-	//keyPressed[40] is true (down)
-	//keypressed[37] is true (left)
-	//keypressed[39] is true (up)
-
 });
+
 //this is where we'll update the hero based on what's inside keysDown
+
+			//anon function - will only get called if it's parent calls it (the keydown event)
+			//with it comes an event parameter (idk wut that is)
 function update(){
-	if(39 in keysDown){
-		heroLocation.x +=10;
-	}
-	if(37 in keysDown){
-		heroLocation.x -=10;
-	}
-	if(38 in keysDown){
-		heroLocation.y -=10;
-	}
-	if(40 in keysDown){
-		heroLocation.y +=10;
-	}
-	if(
-		(heroLocation.x <= monsterLocation.x + 32)
-		&& (heroLocation.y <= monsterLocation.y +32)
-		&& (monsterLocation.x <= heroLocation.x +32)
-		&&(monsterLocation.y <= heroLocation.y+32)
-	){
-		console.log("You caught the monster");
-		var random = Math.random() * 200;
-		var random2 = Math.random() * 200;
-		monsterLocation.x = random;
-		monsterLocation.y = random2;
-	}else{
-		console.log("Get closer");
-	}
+		if(39 in keysDown){ 
+			if(heroLocation.x <= 440){
+			heroLocation.x +=10;//right
+			console.log(heroLocation.x);
+			}}				 
+		if(37 in keysDown){
+			if(heroLocation.x >= 40){
+			heroLocation.x -=10;
+			console.log(heroLocation.x); //left
+		}}
+		if(38 in keysDown){
+			if(heroLocation.y >= 40){
+			heroLocation.y -=10; 
+			console.log(heroLocation.y);//down
+		}}
+		if(40 in keysDown){
+			if(heroLocation.y <= 400){
+			heroLocation.y +=10;
+			console.log(heroLocation.y); //up
+		}}
 
-	//anon function - will only get called if it's parent calls it (the keydown event)
-	//with it comes an event parameter (idk wut that is)
+		if(
+			(heroLocation.x <= monsterLocation.x + 32)
+			&& (heroLocation.y <= monsterLocation.y +32)
+			&& (monsterLocation.x <= heroLocation.x +32)
+			&&(monsterLocation.y <= heroLocation.y+32)
+		){
+			console.log("You caught the monster");
+			var random = Math.random() * 200;
+			var random2 = Math.random() * 200;
+			monsterLocation.x = random;
+			monsterLocation.y = random2;
+		}else{
+			console.log("Get closer");
+		}
+	
 }
-
-
-
-
 
 //game loop KEEP THIS AT THE BOTTOM OF BODY
 function draw(){
@@ -105,7 +103,7 @@ function draw(){
 	context.drawImage(monster, monsterLocation.x, monsterLocation.y);
 	requestAnimationFrame(draw); //pass it the function we want to call  -> RECURSIVE FUNCTION
 	//draw an image on the background. Every single time JS is ready to redraw, the function (draw) is called again (SUPER FAST)
-}
+};
 
 draw();
 
