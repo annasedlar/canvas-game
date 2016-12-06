@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Canvas Game</title>
+</head>
+<body>
+
+
+<script type="text/javascript">
+var canvas = document.createElement("canvas") //tells browser to create a new thing - a new canvas tag
+//method attached to document object. just a tag currently, to hold stuff
+// create a context for JS to play with (methods, properties, ...), canvas NEEDS context
+var context=canvas.getContext('2d')
+//give the canvas dimesions below
+canvas.width = 512;
+canvas.height = 480; 
+
+
+//Add the new canvas tag to theDOM
+document.body.appendChild(canvas);  
+
+var backgroundImage = new Image(); //new = constructor - predefined JS object, comes with lots
+backgroundImage.src = "background.png"; 
+
+
+//game loop
+function draw(){
+	//put our BGImage on the context, at x=0, y=0
+	context.drawImage(backgroundImage, 0, 0) //takes 3 parameters 1 - what image do you want to draw, 2-where do you want to draw it (x-coordinate, 3 - y-coordinate)
+	requestAnimationFrame(draw) //pass it the function we want to call  -> RECURSIVE FUNCTION
+	//draw an image on the background. Every single time JS is ready to redraw, the function (draw) is called again (SUPER FAST)
+};
+draw();
+
+
+
+
+
+
+
+</script>
+</body>
+</html>
