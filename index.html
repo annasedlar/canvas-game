@@ -35,7 +35,9 @@ var monsterLocation = {
 	x: 200,
 	y: 100
 };
-
+var monsterSpeed =1;
+var monsterVectorX = 0;
+var monsterVectorY = 0;
 
 //An array to hold ALL keys currently pressed down (to allow diagonal movement)
 var keysDown=[];
@@ -51,11 +53,48 @@ addEventListener('keydown', function(event){
 	keysDown[event.keyCode] = true;
 });
 
+// function updateMonster(){
+// 	monsterLocation.x += monsterVectorX;
+// 	monsterLocation.y += monsterVectorY;
+// 	if(monsterLocation.x < 40){
+// 			goblinLocation.x 
+// 	}
+
+// };
+
+
+
+
+// setInterval(function(){
+// 	goblinVectorX =	((Math.ceil(Math.random()*3))-2)*gobSpeed;
+// 	goblinVectorY = ((Math.ceil(Math.random()*3))-2)*gobSpeed;
+// }, 700);
+
+// function updateGoblin(){
+// 	goblinLoc.x += goblinVectorX;
+// 	goblinLoc.y += goblinVectorY;
+// 	if(goblinLoc.x < 16){
+// 		goblinLoc.x = 948;
+// 	}
+// 	if(goblinLoc.x > 948){
+// 		goblinLoc.x = 16;
+// 	}
+// 	if(goblinLoc.y < 16){
+// 		goblinLoc.y = 878;
+// 	}
+// 	if(goblinLoc.y > 878){
+// 		goblinLoc.y = 16;
+// 	}
+// }
+
+
+
+
 //this is where we'll update the hero based on what's inside keysDown
 
 			//anon function - will only get called if it's parent calls it (the keydown event)
 			//with it comes an event parameter (idk wut that is)
-function update(){
+function updateHero(){
 		if(39 in keysDown){ 
 			if(heroLocation.x <= 440){
 			heroLocation.x +=10;//right
@@ -96,7 +135,8 @@ function update(){
 
 //game loop KEEP THIS AT THE BOTTOM OF BODY
 function draw(){
-	update();
+	// monsterMovement();
+	updateHero();
 	//put our BGImage on the context, at x=0, y=0
 	context.drawImage(backgroundImage, 0, 0) //takes 3 parameters 1 - what image do you want to draw, 2-where do you want to draw it (x-coordinate, 3 - y-coordinate)
 	context.drawImage(hero, heroLocation.x, heroLocation.y);
