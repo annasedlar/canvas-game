@@ -52,7 +52,9 @@
 
 
 <div id="timer">30 seconds to catch the monster!</div>
-<div id="score"> Score = 0</div>
+<div id ="score ">Score<span id="score-value">0</span></div>
+<!-- <div id="score"> Score = 0</div> -->
+<div id="hi-score">Record = 0<span id="hi-scoreValue">0</span></div>
 
 
 <script type="text/javascript">
@@ -69,6 +71,21 @@ function newPlayer(){
 // Create a setInterval to run every X (second), and inside recalculate the timer
 // When the difference is < 0, stop the game, clear the time, check highscore
 
+function Player(name){
+	this.name = name;
+	this.highscore = 0;
+}
+
+//could also do:
+//Player.prototype.highscore = 0; 
+
+function newPlayer(){
+	var playerNameDiv = document.getElementById('player-name');
+	var playerName = playerNameDiv.value;
+	playerArray.push(new Player(playerName));
+	console.log(playerArray);
+};
+
 function startGame(){
 	gameOn=true; 
 	//user started. save the time (start), save the time +30 seconds(end)
@@ -76,13 +93,15 @@ function startGame(){
 	gameEnd = Date.now() + 30000;
 	// start the setInterval, intervals every second
 	timerInterval = setInterval(updateTimer, 1000);
+	CurrentPlayersScore =0;
+	document.getElementById('score-value').innerHTML = 0;
 };
 
 function updateTimer(){
 	//get difference between two times
 	var newNow = Date.now();
 	// Subtract the gameend time from the current time
-	var timeDif = (gameEnd - newNow)/1000;
+	var timeDif = Math.floor((gameEnd - newNow)/1000);
 	if(timeDif <0){
 		clearInterval(timerInterval);
 		gameOn = false; 
@@ -97,6 +116,9 @@ var gameStart = 0;
 var gameEnd = 0;
 var timerInterval;
 var score = 0;
+var playerArray = [];
+var highscore = 0;
+var currentPlayersScore = 0;
 
 
 // Make a player constructor - name (ask), high score
@@ -194,26 +216,40 @@ function update(){
 		&& (monsterLocation.y <= heroLocation.y + 32)
 	){
 		// console.log("Hero is within 32 of the monster");
+		currentPlayersScore ++;
+		document.getElementById('score-value').innerHTML = currentPlayersScore
+		console.log(highscore);
+		if(currentPlayersScore > highscore){
+			highscore = currentPlayersScore;
+			document.getElementById('hi-scoreValue').innerHTML = highscore;
+		}
+		var currentPlayerIndex = playerArray.length-1;
+		console.log(playerArray[currentPlayerIndex]);
+			if(currentPlayersScore > playerArray[currentPlayerIndex].highscore){
+				playerArray[currentPlayerIndex].highscore = currentPlayersScore;
+			}
+
+
 		console.log("Hero caught the monster");
 		var random = Math.random() * 200;
 		var random2 = Math.random() * 200;
 		monsterLocation.x = random;
 		monsterLocation.y = random2;
-		updateScore();
+		// updateScore();
 	}else{
 		// console.log("Hero is not close enough!");
 	}
 }
 
 
-	function updateScore(){
+// 	function updateScore(){
 
-	// if((heroLocation.x === monsterLocation.x)
-	// && (heroLocation.y === monsterLocation.y)){
-		score ++ ;
-		document.getElementById('score').innerHTML = "Score = " + score; 
-	// }
-}
+// 	// if((heroLocation.x === monsterLocation.x)
+// 	// && (heroLocation.y === monsterLocation.y)){
+// 		score ++ ;
+// 		document.getElementById('score').innerHTML = "Score = " + score; 
+// 	// }
+// }
 
 // KEEP THIS AT THE BOTTOM
 function draw(){
