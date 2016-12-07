@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Canvas Game!</title>
+</head>
+<body>
+<style>
+	#timer{
+		text-align: center;
+		margin: auto;
+		width: 800px;
+		height: 50px;
+		font-size: 40px;
+		font-family: century;
+		background-color: grey;
+		border: 2px solid black;
+		border-radius: 50%;
+		color: white;
+	}
+
+	button{
+		text-align: center;
+		background-color: lightgrey;
+		border: 2px solid black;
+	}
+
+	#buttons{
+		text-align: center;
+	}
+	body{
+		text-align: center;
+		background-color: lightgoldenrodyellow;
+	}
+
+	input{
+		text-align: center;
+		width: 300px;
+	}
+
+	#score{
+		text-align: center;
+		margin: auto;
+		width:  300px;
+		font-size: 30px;
+		color: darkgrey;
+		text-shadow: 5px black;
+		font-family: century;
+	}
+</style>
+
+
+
+
+<div id="timer">30 seconds to catch the monster!</div>
+<div id="score"> Score = 0</div>
+
+
+<script type="text/javascript">
+
+function newPlayer(){
+	var playerNameDiv = document.getElementById('player-name');
+	var playerName = playerNameDiv.value;
+	console.dir(playerNameDiv);
+}
+
+// Start game button - when clicked, game starts, timer starts, player can move. 
+// When clicked on get Date.now() and save it to current date
+// When clicked on get Date.now() + 30 * 1000 (30,000 milliseconds = 30 seconds)
+// Create a setInterval to run every X (second), and inside recalculate the timer
+// When the difference is < 0, stop the game, clear the time, check highscore
+
+function startGame(){
+	gameOn=true; 
+	//user started. save the time (start), save the time +30 seconds(end)
+	gameStart = Date.now();
+	gameEnd = Date.now() + 30000;
+	// start the setInterval, intervals every second
+	timerInterval = setInterval(updateTimer, 1000);
+};
+
+function updateTimer(){
+	//get difference between two times
+	var newNow = Date.now();
+	// Subtract the gameend time from the current time
+	var timeDif = (gameEnd - newNow)/1000;
+	if(timeDif <0){
+		clearInterval(timerInterval);
+		gameOn = false; 
+		timeDif = 0;
+		document.getElementById('timer').innerHTML = "Game Over"
+	}else{
+	document.getElementById("timer").innerHTML = timeDif + " seconds left"; 
+	};
+}
+
+var gameStart = 0; 
+var gameEnd = 0;
+var timerInterval;
+var score = 0;
+
+
+// Make a player constructor - name (ask), high score
+// Make an input for player name
+//make a button a new player
+
+// Create the canvas tag with JS
+var canvas = document.createElement('canvas');
+// Crate a context for JS to play with (methods, properties, blah blah blah)
+var context = canvas.getContext('2d')
+// Give the canvas some height and width
+canvas.width = 512;
+canvas.height = 480;
+// Add the canvas tag to the DOM
+document.body.appendChild(canvas);
+var backgroundImage = new Image();
+backgroundImage.src = "background.png";
+var speedModifier = 1;
+var gameOn = false;
+
+// Make a var for our hero. He is an image!
+var hero = new Image();
+hero.src = "hero.png";
+var heroLocation = {
+	x: 100,
+	y: 100
+}
+// Make a var for our bad guy. He is an image!
+var monster = new Image();
+monster.src = "monster.png";
+var monsterLocation = {
+	x: 200,
+	y: 100
+}
+// An array to hold all the keys that are currently pressed down.
+var keysDown = [];
+addEventListener('keyup', function(event){
+	delete keysDown[event.keyCode];
+});
+// We need a way to tell if the user has pushed an arrow key!
+addEventListener('keydown', function(event){
+	keysDown[event.keyCode] = true;
+	// console.log(keysDown);
+	// if keyDown[39] is true, then user pushed the right arrow
+	// if keyDown[40] is true, then user pushed the down arrow		
+	// if keyDown[37] is true, then user pushed the left arrow		
+	// if keyDown[38] is true, then user pushed the up arrow		
+	// we know a key was pressed, or we wouldn't be in here
+	// What key did they press?
+	// console.log(event);
+	// if(event.key === 'ArrowDown'){
+	// 	console.log('User pressed down arrow');
+	// 	heroLocation.y += 10;
+	// }
+	// if(event.key === 'ArrowUp'){
+	// 	console.log('User pressed up arrow');
+	// 	heroLocation.y -= 10;
+	// }
+	// if(event.key === 'ArrowLeft'){
+	// 	console.log('User pressed left arrow');
+	// 	heroLocation.x -= 10;
+	// }
+	// if(event.key === 'ArrowRight'){
+	// 	console.log('User pressed right arrow');
+	// 	heroLocation.x += 10;
+	// }
+});
+// This is where we will update the hero based on what's true in keysDown
+function update(){
+	// User pressed right at some point because it's in the array. Move right.
+	if(39 in keysDown){
+		if(heroLocation.x <= 400){
+			heroLocation.x += (10 * speedModifier);
+		}
+	}
+	if(37 in keysDown){
+		if(heroLocation.x >= 10){
+			heroLocation.x -= (10 * speedModifier);
+		}
+	}		
+	if(38 in keysDown){
+		if(heroLocation.y >= 10){
+			heroLocation.y -= (10 * speedModifier);
+		}
+	}
+	if(40 in keysDown){
+		if(heroLocation.y <= 400){
+			heroLocation.y += (10 * speedModifier);
+		}
+	}
+	if(
+		(heroLocation.x <= monsterLocation.x + 32)
+		&& (heroLocation.y <= monsterLocation.y + 32)
+		&& (monsterLocation.x <= heroLocation.x + 32)
+		&& (monsterLocation.y <= heroLocation.y + 32)
+	){
+		// console.log("Hero is within 32 of the monster");
+		console.log("Hero caught the monster");
+		var random = Math.random() * 200;
+		var random2 = Math.random() * 200;
+		monsterLocation.x = random;
+		monsterLocation.y = random2;
+		updateScore();
+	}else{
+		// console.log("Hero is not close enough!");
+	}
+}
+
+
+	function updateScore(){
+
+	// if((heroLocation.x === monsterLocation.x)
+	// && (heroLocation.y === monsterLocation.y)){
+		score ++ ;
+		document.getElementById('score').innerHTML = "Score = " + score; 
+	// }
+}
+
+// KEEP THIS AT THE BOTTOM
+function draw(){
+	if(gameOn){
+	update();
+	}
+	// Put our BGImage on the context, at x = 0, y = 0
+	context.drawImage(backgroundImage,0,0);
+	context.drawImage(hero, heroLocation.x, heroLocation.y);
+	context.drawImage(monster, monsterLocation.x, monsterLocation.y);
+	requestAnimationFrame(draw);
+	}
+draw();
+</script>
+
+<div id="buttons">
+	<button id="button1" onclick="startGame();">Start Game</button>
+	<button id="button2" onclick="newPlayer()">NewPlayer</button>
+</div>
+<input id="player-name" type="text" placeholder="Player Name">
+
+
+</body>
+</html>
